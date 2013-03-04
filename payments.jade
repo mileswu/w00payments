@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+doctype 5
+html
+  head
+    title w00.eu: Payments
+    script(src="https://checkout.stripe.com/v2/checkout.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js")
+  
+  body
+    h1 w00.eu: Payments
+    form(action="charge", method="post")
+      script(src="https://checkout.stripe.com/v2/checkout.js",
+      class="stripe-button",
+      data-key=stripe_key,
+      data-amount=amount,
+      data-name="w00.eu")
+      input(type="hidden", name="name", value=name)
+      input(type="hidden", name="amount", value=amount)
