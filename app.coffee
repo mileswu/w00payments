@@ -26,6 +26,7 @@ server = http.createServer (req, res) ->
       locals["stripe_key"] = process.env['STRIPEPUBLICKEY']
       locals["amount"] = amount
       locals["name"] = name
+      locals["currency"] = if query['currency'] then query['currency'] else 'usd'
 
       jadec = jade.compile data, {}
       res.writeHead 200, {'Content-Type': 'text/html'}
@@ -36,14 +37,14 @@ server = http.createServer (req, res) ->
       fullbody += chunk.toString()
     req.on 'end', () ->
       query = querystring.parse fullbody
-      if !query or !query['amount'] or !query['name'] or !query['stripeToken']
+      if !query or !query['amount'] or !query['name'] or !query['stripeToken'] or !query['currency']
         res.writeHead 404
         res.end "404"
         return
 
       stripe_options = {}
       stripe_options['amount'] = parseInt(query['amount'])
-      stripe_options['currency'] = 'USD'
+      stripe_options['currency'] = query['currency']
       stripe_options['card'] = query['stripeToken']
       stripe_options['description'] = query['name']
       stripe.charges.create stripe_options, (err, charge) ->
@@ -62,6 +63,6 @@ server = http.createServer (req, res) ->
     res.writeHead 404
     res.end "404"
 
-server.listen 9050, '127.0.0.1'
+server.listen 54138, '127.0.0.1'
 console.log 'Ready'
 
